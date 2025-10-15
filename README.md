@@ -1,2 +1,3 @@
-# data-management_fire
-Manage data collected by the LKC on fire and fire-related metrics
+# LKC Data Management - Fire
+
+Manage data collected by the La Kretz Center on fire and fire-related metrics.
