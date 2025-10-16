@@ -187,8 +187,16 @@ grav_v7 <- grav_v6 %>%
     Dry.weight.total = sum(Dry.weight, na.rm = T)
   ) %>% 
   dplyr::ungroup() %>% 
+  # Replace 0s in either of those totals with NA (to avoid getting bizarre values later)
+  dplyr::mutate(Wet.weight.total = ifelse(Wet.weight.total == 0,
+                                          yes = NA, no = Wet.weight.total),
+                Dry.weight.total = ifelse(Dry.weight.total == 0,
+                                          yes = NA, no = Dry.weight.total)) %>% 
   # Finally, calculate moisture content
-  dplyr::mutate(Moisture_content = (Wet.weight.total - Dry.weight.total) / Dry.weight.total) %>% 
+  dplyr::mutate(Moisture_content = ifelse(is.na(Wet.weight.total) != T &
+                                            is.na(Dry.weight.total) != T,
+                                          yes = (Wet.weight.total - Dry.weight.total) / Dry.weight.total, no = NA)
+                ) %>% 
   # And relocate columns to original order
   dplyr::relocate(dplyr::starts_with("Wet.weight"), .after = Bottle_SampleWET_weight) %>% 
   dplyr::relocate(dplyr::starts_with("Dry.weight"), .after = dry.bag) %>% 
