@@ -136,13 +136,17 @@ supportR::num_check(data = grav_v4, col = grav_num_cols)
 # Do needed repairs
 grav_v5 <- grav_v4 %>% 
   # Fix non-numbers in "CC" column
-  dplyr::mutate(Notes = ifelse(CC == "<5%",
-                               yes = paste(Notes, '; True CC was "<5%" but replaced with 2.5 so that column is numeric'), 
-                               no = Notes),
-                CC = dplyr::case_when(
-                  CC == "<5%" ~ "2.5",
-                  CC == "none" ~ "0",
-                  T ~ CC)) %>% 
+  ## And note the change in the "Notes column
+  dplyr::mutate(Notes = dplyr::case_when(
+    CC == "<5%" & is.na(Notes) ~ 'True CC was "<5%" but replaced with "2.5" so that column is numeric',
+    CC == "<5%" & is.na(Notes) != T ~ paste(Notes, '; True CC was "<5%" but replaced with "2.5" so that column is numeric'),
+    T ~ Notes
+  ),
+  ## Actually swap the non-number
+  CC = dplyr::case_when(
+    CC == "<5%" ~ "2.5",
+    CC == "none" ~ "0",
+    T ~ CC)) %>% 
   # Replace notes with true NAs
   dplyr::mutate(dplyr::across(.cols = dplyr::contains(c("weight")),
                               .fns = ~ gsub(pattern = "forgot bottle|na",
