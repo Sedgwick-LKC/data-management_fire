@@ -14,6 +14,6 @@ rm(list = ls()); gc()
 # Create necessary folders
 dir.create(path = file.path("data", "raw"), showWarnings = F, recursive = T)
 dir.create(path = file.path("data", "tidy"), showWarnings = F)
-dir.create(path = file.path("graphs"))
+dir.create(path = file.path("graphs"), showWarnings = F)
 
 # End ----
