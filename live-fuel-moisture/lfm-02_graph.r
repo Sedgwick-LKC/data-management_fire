@@ -95,7 +95,3 @@ ggsave(filename = file.path("graphs", plot_name),
        height = 6, width = 10, units = "in")
 
 # End ----
-
-
-ggsave("lfm_plot_20251010.png",plot=last_plot(),dpi=300)
-
