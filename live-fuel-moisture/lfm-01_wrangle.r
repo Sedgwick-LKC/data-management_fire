@@ -45,29 +45,22 @@ googledrive::drive_download(file = lfm_drive$id, overwrite = T, path = lfm_path)
 # What sheets are in the data?
 (lfm_tabs <- readxl::excel_sheets(path = lfm_path))
 
-# Separate 'gravimetric' and 'immediate' sheets
+# Grab just the 'gravimetric' sheet(s)
 grav_tabs <- lfm_tabs[stringr::str_detect(string = lfm_tabs, pattern = "gravi")]
-imm_tabs <- lfm_tabs[stringr::str_detect(string = lfm_tabs, pattern = "immediate")]
 
 # Read in the gravimetric tabs
-grav_v1 <- readxl::read_excel(path = lfm_path, sheet = grav_tabs)
-
-# Check structure
-dplyr::glimpse(grav_v1)
-
-# Read in the immediate tabs too
-imm_v1 <- imm_tabs %>% 
+grav_v1 <- grav_tabs %>% 
   purrr::map(.f = ~ readxl::read_excel(path = lfm_path, sheet = .x)) %>% 
   dplyr::bind_rows()
 
 # Check structure
-dplyr::glimpse(imm_v1)
+dplyr::glimpse(grav_v1)
 
 ## ----------------------------- ##
 # Fix Column Names ----
 ## ----------------------------- ##
 
-# Do needed repairs
+# Do needed repairs to column names
 grav_v2 <- grav_v1 %>% 
   # Need to remove spaces in column names
   dplyr::rename_with(.fn = ~ gsub(pattern = " ", replacement = ".", x = .)) %>% 
@@ -77,19 +70,6 @@ grav_v2 <- grav_v1 %>%
 # Re-check structure
 dplyr::glimpse(grav_v2)
 
-# Do the same edits for the other table
-imm_v2 <- imm_v1 %>% 
-  dplyr::rename_with(.fn = ~ gsub(pattern = " ", replacement = ".", x = .)) %>% 
-  dplyr::rename_with(.fn = ~ gsub(pattern = "%", replacement = "percent", x = .))
-
-# Re-check structure
-dplyr::glimpse(imm_v2)
-
-## ----------------------------- ##
-# Combine Types of LFM ----
-## ----------------------------- ##
-
-# Combine the 
 
 
 ## ----------------------------- ##
