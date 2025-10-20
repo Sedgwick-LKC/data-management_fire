@@ -86,9 +86,20 @@ ggplot(data = lfm_v2, aes(x = Date, y = Moisture)) +
 
 # Get a nice file name for this
 (plot_name <- paste0("live-fuel-moisture_scatterplot_", 
-                     min(year(lfm_v2$Date)), "-", max(year(lfm_v2$Date)),
-                     "_made-", Sys.Date(),
-                     ".png"))
+                     min(year(lfm_v2$Date)), "-", max(year(lfm_v2$Date))))
+
+# Do you want a date stamp in the file name?
+date_file <- FALSE ## Set to TRUE if desired
+
+# Add date stamp (or not) to file name
+if(date_file == T){
+  plot_name <- paste0(plot_name, "_made-", Sys.Date(), ".png")
+} else {
+  plot_name <- paste0(plot_name, ".png")
+}
+
+# Does the file name look correct?
+plot_name
 
 # Export locally
 ggsave(filename = file.path("graphs", plot_name),
