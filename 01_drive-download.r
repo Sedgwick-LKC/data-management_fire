@@ -2,7 +2,7 @@
 # Download Data (from Google Drive)
 ## ------------------------------------------------ ##
 # Purpose:
-## Wrangle the 'raw' live fuel moisture (LFM) data
+## Download 'raw' data from various parts of the LKC Shared Drive
 
 # For the code to talk to Drive, you need to tell R who you are (in Google)
 ## Work through the following tutorial to do so
