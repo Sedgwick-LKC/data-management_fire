@@ -6,7 +6,7 @@
 
 # Load libraries
 # install.packages("librarian")
-librarian::shelf(tidyverse, googledrive)
+librarian::shelf(tidyverse)
 
 # Get set up
 source("00_setup.r")
@@ -77,6 +77,10 @@ dplyr::glimpse(grav_v3)
 
 # Need to some general standardization for maximum machine readability
 grav_v4 <- grav_v3 %>% 
+  # Fix any issues with site abbreviations
+  dplyr::mutate(Site = dplyr::case_when(
+    Site == "OQ2" ~ "OW2",
+    T ~ Site)) %>% 
   # Standardize delimeter between entries in 'Persons' column
   dplyr::mutate(Persons = dplyr::case_when(
     ## Remove spaces but keep commas (where both are present)
@@ -155,7 +159,7 @@ grav_v7 <- grav_v6 %>%
   # Remove calculated columns
   dplyr::select(-Wet.weight, -Wet.weight.total,
                 -Dry.weight, -Dry.weight.total,
-                -Moisture_content) %>% 
+                -Moisture_content) %>%
   # Re-calculate bottle-specific metrics
   dplyr::mutate(
     ## Wet weight (g)
@@ -207,9 +211,20 @@ dplyr::glimpse(grav_v99)
 
 # Get a nice file name for this
 (grav_name <- paste0("live-fuel-moisture_", 
-                     min(year(grav_v99$Date)), "-", max(year(grav_v99$Date)),
-                     "_updated-", Sys.Date(),
-                     ".csv"))
+                     min(year(grav_v99$Date)), "-", max(year(grav_v99$Date))))
+
+# Do you want a date stamp in the file name?
+date_file <- FALSE ## Set to TRUE if desired
+
+# Add date stamp (or not) to file name
+if(date_file == T){
+  grav_name <- paste0(grav_name, "_updated-", Sys.Date(), ".csv")
+} else {
+  grav_name <- paste0(grav_name, ".csv")
+}
+
+# Does the file name look correct?
+grav_name
 
 # Export this locally
 write.csv(x = grav_v99, na = '', row.names = F,
