@@ -29,14 +29,16 @@ rm(list = ls()); gc()
 (lfm_graphs <- dir(path = file.path("graphs"), pattern = "live-fuel-moisture"))
 
 # Identify link to destination Drive folder
-lfm_drive <- googledrive::as_id("")
+lfm_drive <- googledrive::as_id("https://drive.google.com/drive/folders/1EOrKk39IppCX9gQ5KWlpO890XGpcgwzg")
 
-# # Upload data to that folder
-# purrr::walk(.x = lfm_data, .f = ~ googledrive::drive_upload(media = file.path("data", "tidy", .x),
-#                                                             overwrite = T, path = lfm_drive))
-# 
-# # Upload graphs to the folder too
-# purrr::walk(.x = lfm_graphs, .f = ~ googledrive::drive_upload(media = file.path("graphs", .x),
-#                                                               overwrite = T, path = lfm_drive))
+# Upload data to that folder
+purrr::walk(.x = lfm_data, 
+  .f = ~ googledrive::drive_upload(media = file.path("data", "tidy", .x),
+  overwrite = T, path = lfm_drive))
+ 
+# Upload graphs to the folder too
+ purrr::walk(.x = lfm_graphs, 
+  .f = ~ googledrive::drive_upload(media = file.path("graphs", .x),
+  overwrite = T, path = lfm_drive))
 
 # End ----
