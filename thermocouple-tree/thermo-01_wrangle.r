@@ -146,7 +146,7 @@ meta_v03 <- meta_v02 %>%
       yes = as.numeric(away_distance), no = 0)
   ) %>% 
   # Ditch superseded 'value' column
-  dplyr::select(-value)
+  dplyr::select(-value, -away_distance)
 
 # Check structure
 dplyr::glimpse(meta_v03)
