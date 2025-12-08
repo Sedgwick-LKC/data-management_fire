@@ -138,10 +138,12 @@ meta_v03 <- meta_v02 %>%
   tidyr::pivot_longer(cols = dplyr::starts_with("thermocouple_"), names_to = "port") %>% 
   # Make the 'value' column into the true information
   dplyr::mutate(
-    diameter.breast.height_m = ifelse(stringr::str_detect(string = value, pattern = "_m"),
-      yes = as.numeric(stringr::str_extract(string = value, pattern = "\\d")), no = NA),
+    height_cm = dplyr::case_when(
+      value %in% c("0_m", "Away") ~ 0,
+      value == "50_m" ~ 50,
+      value == "DBH" ~ 137), # DBH = diameter at breast height (1.37 m)
     dist.from.tree_cm = ifelse(stringr::str_detect(string = tolower(value), pattern = "away"),
-      yes = as.numeric(away_distance), no = NA)
+      yes = as.numeric(away_distance), no = 0)
   ) %>% 
   # Ditch superseded 'value' column
   dplyr::select(-value)
