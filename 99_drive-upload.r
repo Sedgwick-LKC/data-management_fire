@@ -21,7 +21,7 @@ source("00_setup.r")
 rm(list = ls()); gc()
 
 ## ----------------------------- ##
-# Download LFM Data ----
+# Upload LFM Outputs ----
 ## ----------------------------- ##
 
 # Identify the relevant local files
@@ -37,8 +37,30 @@ purrr::walk(.x = lfm_data,
   overwrite = T, path = lfm_drive))
  
 # Upload graphs to the folder too
- purrr::walk(.x = lfm_graphs, 
+purrr::walk(.x = lfm_graphs, 
   .f = ~ googledrive::drive_upload(media = file.path("graphs", .x),
   overwrite = T, path = lfm_drive))
+
+# Clear environment
+rm(list = ls()); gc()
+
+## ----------------------------- ##
+# Upload Thermocouple (Tree) Outputs ----
+## ----------------------------- ##
+
+# Identify the relevant local files
+(therm.tree_data <- dir(path = file.path("data", "tidy"), pattern = "thermocouple"))
+
+# Identify link to destination Drive folder
+therm.tree_drive <- googledrive::as_id("https://drive.google.com/drive/folders/1qWM1-HT6SFnzQ5O0dPRAy9ntYc_h-6pw")
+
+# Upload data to that folder
+## Note, the thermocouple data is BIG (~500 MB) so it's better to upload manually
+# purrr::walk(.x = therm.tree_data, 
+#  .f = ~ googledrive::drive_upload(media = file.path("data", "tidy", .x),
+#  overwrite = T, path = therm.tree_drive))
+
+# Clear environment
+rm(list = ls()); gc()
 
 # End ----
