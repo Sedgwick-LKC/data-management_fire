@@ -67,7 +67,7 @@ therm_v02 <- therm_v01 %>%
   # Fix column class issues
   dplyr::mutate(dplyr::across(.cols = dplyr::starts_with("port"),
     .fns = as.numeric)) %>% 
-  dplyr::mutate(date.time = as.POSIXct(date.time, format = "%m/%d/%y %H:%M:%S"))
+  dplyr::mutate(date.time = as.POSIXct(date.time, format = "%m/%d/%y %I:%M:%S %p"))
 
 # Check structure
 dplyr::glimpse(therm_v02)
